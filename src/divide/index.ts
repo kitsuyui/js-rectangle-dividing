@@ -40,7 +40,51 @@ export const divideCoordinatedSquareHorizontally = (
   )
 }
 
-export const divideCoordinatedSquareByAspectRatio = (
+export const divideCoordinatedSquareByAspectRatio = (params: {
+  size: square.Square
+  weights: number[]
+  tobeAspectRatio?: number // default 16:9 = 1.78
+  direction?: 'left-top' | 'right-top' | 'left-bottom' | 'right-bottom' // default left-top
+}): coordinateSquare.CoodinatedSquare[] => {
+  const tobeAspectRatio = params.tobeAspectRatio || 1.78
+  const direction = params.direction || 'left-top'
+  const { width, height } = params.size
+  const base = divideCoordinatedSquareByAspectRatioBase(
+    { width, height },
+    params.weights,
+    tobeAspectRatio
+  )
+  switch (direction) {
+    case 'right-top':
+      return base.map((item) => ({
+        origin: {
+          x: width - item.origin.x - item.size.width,
+          y: item.origin.y,
+        },
+        size: item.size,
+      }))
+    case 'left-bottom':
+      return base.map((item) => ({
+        origin: {
+          x: item.origin.x,
+          y: height - item.origin.y - item.size.height,
+        },
+        size: item.size,
+      }))
+    case 'right-bottom':
+      return base.map((item) => ({
+        origin: {
+          x: width - item.origin.x - item.size.width,
+          y: height - item.origin.y - item.size.height,
+        },
+        size: item.size,
+      }))
+    default:
+      return base
+  }
+}
+
+const divideCoordinatedSquareByAspectRatioBase = (
   size: square.Square,
   weights: number[],
   tobeAspectRatio: number = 1.78 // default 16:9 = 1.78

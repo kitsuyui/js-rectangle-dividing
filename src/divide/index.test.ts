@@ -37,17 +37,91 @@ test('divideCoordinatedSquareHorizontally', () => {
   testBasis({ baseSize, weights, dividedAreas })
 })
 
-test('divideCoordinatedSquareByAspectRatio', () => {
-  const baseSize = { width: 180, height: 180 }
-  const weights = [3, 2, 1]
-  const result = divideCoordinatedSquareByAspectRatio(baseSize, weights, 2.0)
-  const expected = [
-    { origin: { x: 0, y: 0 }, size: { width: 180, height: 90 } },
-    { origin: { x: 0, y: 90 }, size: { width: 120, height: 90 } },
-    { origin: { x: 120, y: 90 }, size: { width: 60, height: 90 } },
-  ]
-  expect(result).toEqual(expected)
-  testBasis({ baseSize, weights, dividedAreas: result })
+describe('divideCoordinatedSquareByAspectRatioBase', () => {
+  test('default direction', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+    })
+    const expected = [
+      { origin: { x: 0, y: 0 }, size: { width: 180, height: 90 } },
+      { origin: { x: 0, y: 90 }, size: { width: 120, height: 90 } },
+      { origin: { x: 120, y: 90 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
+  test('left-top', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+      direction: 'left-top',
+    })
+    const expected = [
+      { origin: { x: 0, y: 0 }, size: { width: 180, height: 90 } },
+      { origin: { x: 0, y: 90 }, size: { width: 120, height: 90 } },
+      { origin: { x: 120, y: 90 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
+  test('right-top', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+      direction: 'right-top',
+    })
+    const expected = [
+      { origin: { x: 0, y: 0 }, size: { width: 180, height: 90 } },
+      { origin: { x: 60, y: 90 }, size: { width: 120, height: 90 } },
+      { origin: { x: 0, y: 90 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
+  test('left-bottom', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+      direction: 'left-bottom',
+    })
+    const expected = [
+      { origin: { x: 0, y: 90 }, size: { width: 180, height: 90 } },
+      { origin: { x: 0, y: 0 }, size: { width: 120, height: 90 } },
+      { origin: { x: 120, y: 0 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
+  test('right-bottom', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+      direction: 'right-bottom',
+    })
+    const expected = [
+      { origin: { x: 0, y: 90 }, size: { width: 180, height: 90 } },
+      { origin: { x: 60, y: 0 }, size: { width: 120, height: 90 } },
+      { origin: { x: 0, y: 0 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
 })
 
 const testBasis = (items: {
