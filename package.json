@@ -1,9 +1,9 @@
 {
-  "name": "@kitsuyui/js-square-dividing",
+  "name": "@kitsuyui/js-rectangle-dividing",
   "version": "0.0.0",
   "license": "MIT",
   "author": "Yui KITSU <kitsuyui@kitsuyui.com>",
-  "description": "Divide a square into n squares",
+  "description": "Divide a rectangle into n rectangles",
   "scripts": {
     "build": "pnpm build:all",
     "build:lib": "tsup src/index.ts --dts --format cjs,esm --minify --clean --sourcemap",

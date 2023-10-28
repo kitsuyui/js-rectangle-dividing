@@ -1,5 +1,5 @@
-import * as coordinateSquare from '../coordinated_square'
-import * as square from '../square'
+import * as coordinateRectangle from '../coordinated_rectangle'
+import * as rectangle from '../rectangle'
 
 const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
 const getTotalWeight = (weights: number[]) => sum(weights)
@@ -10,10 +10,10 @@ const getTotalWeight = (weights: number[]) => sum(weights)
  * @param weights
  * @returns divided area
  */
-export const divideCoordinatedSquareVertiacally = (
-  size: square.Square,
+export const divideCoordinatedrectangleVertiacally = (
+  size: rectangle.Rectangle,
   weights: number[]
-): coordinateSquare.CoodinatedSquare[] => {
+): coordinateRectangle.CoodinatedRectangle[] => {
   // Divide area into n parts (weights.length) by weights (big weight has big area)
   const totalWeight = getTotalWeight(weights)
   const { width, height } = size
@@ -31,25 +31,26 @@ export const divideCoordinatedSquareVertiacally = (
   return divided
 }
 
-export const divideCoordinatedSquareHorizontally = (
-  size: square.Square,
+export const divideCoordinatedrectangleHorizontally = (
+  size: rectangle.Rectangle,
   weights: number[]
-): coordinateSquare.CoodinatedSquare[] => {
-  return divideCoordinatedSquareVertiacally(square.rotate(size), weights).map(
-    coordinateSquare.rotate
-  )
+): coordinateRectangle.CoodinatedRectangle[] => {
+  return divideCoordinatedrectangleVertiacally(
+    rectangle.rotate(size),
+    weights
+  ).map(coordinateRectangle.rotate)
 }
 
-export const divideCoordinatedSquareByAspectRatio = (params: {
-  size: square.Square
+export const divideCoordinatedrectangleByAspectRatio = (params: {
+  size: rectangle.Rectangle
   weights: number[]
   tobeAspectRatio?: number // default 16:9 = 1.78
   direction?: 'left-top' | 'right-top' | 'left-bottom' | 'right-bottom' // default left-top
-}): coordinateSquare.CoodinatedSquare[] => {
+}): coordinateRectangle.CoodinatedRectangle[] => {
   const tobeAspectRatio = params.tobeAspectRatio || 1.78
   const direction = params.direction || 'left-top'
   const { width, height } = params.size
-  const base = divideCoordinatedSquareByAspectRatioBase(
+  const base = divideCoordinatedrectangleByAspectRatioBase(
     { width, height },
     params.weights,
     tobeAspectRatio
@@ -84,17 +85,17 @@ export const divideCoordinatedSquareByAspectRatio = (params: {
   }
 }
 
-const divideCoordinatedSquareByAspectRatioBase = (
-  size: square.Square,
+const divideCoordinatedrectangleByAspectRatioBase = (
+  size: rectangle.Rectangle,
   weights: number[],
   tobeAspectRatio: number = 1.78 // default 16:9 = 1.78
-): coordinateSquare.CoodinatedSquare[] => {
+): coordinateRectangle.CoodinatedRectangle[] => {
   // Divide area into n parts (weights.length) by weights (big weight has big area)
   const { width, height } = size
   const totalWeight = getTotalWeight(weights)
   const totalArea = width * height
   const areaPerWeight = totalArea / totalWeight
-  const inAreas: coordinateSquare.CoodinatedSquare[] = []
+  const inAreas: coordinateRectangle.CoodinatedRectangle[] = []
   let remainArea = { width, height, x: 0, y: 0 }
   const remainWeights = weights.slice() // copy
   while (remainWeights.length > 0) {
