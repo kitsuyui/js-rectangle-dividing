@@ -7,18 +7,18 @@ import {
 } from '.'
 
 describe('getArea', () => {
-  it('returns the area of a square', () => {
-    const coodinatedSquare = {
+  it('returns the area of a rectangle', () => {
+    const coodinatedrectangle = {
       origin: { x: 0, y: 0 },
       size: { width: 5, height: 10 },
     }
-    expect(getArea(coodinatedSquare)).toBe(50)
+    expect(getArea(coodinatedrectangle)).toBe(50)
   })
 })
 
 describe('getVertecies', () => {
-  it('returns the vertecies of a square', () => {
-    const coodinatedSquare = {
+  it('returns the vertecies of a rectangle', () => {
+    const coodinatedrectangle = {
       origin: { x: 0, y: 0 },
       size: { width: 5, height: 10 },
     }
@@ -28,67 +28,67 @@ describe('getVertecies', () => {
       { x: 5, y: 10 }, // bottom right
       { x: 0, y: 10 }, // bottom left
     ]
-    const asis = getVertecies(coodinatedSquare)
+    const asis = getVertecies(coodinatedrectangle)
     expect(asis).toEqual(expected)
     expect(asis.length).toBe(4)
   })
 })
 
 describe('getAspectRatio', () => {
-  it('returns the aspect ratio of a square', () => {
-    const coodinatedSquare = {
+  it('returns the aspect ratio of a rectangle', () => {
+    const coodinatedrectangle = {
       origin: { x: 0, y: 0 },
       size: { width: 5, height: 10 },
     }
-    expect(getAspectRatio(coodinatedSquare)).toBe(0.5)
+    expect(getAspectRatio(coodinatedrectangle)).toBe(0.5)
   })
 })
 
 describe('containsPoint', () => {
-  it('returns true if the point is in the square', () => {
-    const coodinatedSquare = {
+  it('returns true if the point is in the rectangle', () => {
+    const coodinatedrectangle = {
       origin: { x: 0, y: 0 },
       size: { width: 5, height: 10 },
     }
     const point = { x: 2, y: 5 }
-    expect(containsPoint(coodinatedSquare, point)).toBe(true)
+    expect(containsPoint(coodinatedrectangle, point)).toBe(true)
   })
-  it('returns false if the point is not in the square', () => {
-    const coodinatedSquare = {
+  it('returns false if the point is not in the rectangle', () => {
+    const coodinatedrectangle = {
       origin: { x: 0, y: 0 },
       size: { width: 5, height: 10 },
     }
     const point = { x: 6, y: 5 }
-    expect(containsPoint(coodinatedSquare, point)).toBe(false)
+    expect(containsPoint(coodinatedrectangle, point)).toBe(false)
   })
 })
 
 describe('overlaps', () => {
-  it('returns true if the two squares overlap', () => {
-    const coodinatedSquare = {
+  it('returns true if the two rectangles overlap', () => {
+    const coodinatedrectangle = {
       origin: { x: 0, y: 0 },
       size: { width: 5, height: 10 },
     }
-    const otherCoodinatedSquare = {
+    const otherCoodinatedrectangle = {
       origin: { x: 2, y: 5 },
       size: { width: 5, height: 10 },
     }
     // ovelaps is commutative
-    expect(overlaps(coodinatedSquare, otherCoodinatedSquare)).toBe(true)
-    expect(overlaps(otherCoodinatedSquare, coodinatedSquare)).toBe(true)
+    expect(overlaps(coodinatedrectangle, otherCoodinatedrectangle)).toBe(true)
+    expect(overlaps(otherCoodinatedrectangle, coodinatedrectangle)).toBe(true)
   })
 
-  it('returns false if the two squares do not overlap', () => {
-    const coodinatedSquare = {
+  it('returns false if the two rectangles do not overlap', () => {
+    const coodinatedrectangle = {
       origin: { x: 0, y: 0 },
       size: { width: 5, height: 10 },
     }
-    const otherCoodinatedSquare = {
+    const otherCoodinatedrectangle = {
       origin: { x: 6, y: 5 },
       size: { width: 5, height: 10 },
     }
     // ovelaps is commutative
-    expect(overlaps(coodinatedSquare, otherCoodinatedSquare)).toBe(false)
-    expect(overlaps(otherCoodinatedSquare, coodinatedSquare)).toBe(false)
+    expect(overlaps(coodinatedrectangle, otherCoodinatedrectangle)).toBe(false)
+    expect(overlaps(otherCoodinatedrectangle, coodinatedrectangle)).toBe(false)
   })
 })
