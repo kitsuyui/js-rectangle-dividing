@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  release:
+    # "released" events are emitted either when directly be released or be edited from pre-released.
+    types: [prereleased, released]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2.4.0
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: install and build
+        run: |
+          pnpm install
+          pnpm build
+
+      - name: update version
+        if: github.event_name == 'release'
+        run: |
+          git config user.email "dummy@dummy"
+          git config user.name "dummy"
+          npm version from-git --allow-same-version --no-git-tag-version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - run: pnpm pack
+
+      - name: Test installation
+        run: |
+          set -eu
+          built_dir=$(pwd)
+          tempdir=$(mktemp -d)
+          cd $tempdir
+          pnpm add $built_dir/*.tgz
+          cd $built_dir
+          rm -rf $tempdir
+
+      - run: npm publish --access=public
+        if: github.event_name == 'release' && !github.event.release.prerelease
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
