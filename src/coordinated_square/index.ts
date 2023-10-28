@@ -61,3 +61,16 @@ export const overlaps = (
 
   return false
 }
+
+export const rotate = (
+  coodinatedSquare: CoodinatedSquare
+): CoodinatedSquare => ({
+  origin: {
+    x: coodinatedSquare.origin.y,
+    y: coodinatedSquare.origin.x,
+  },
+  size: {
+    width: coodinatedSquare.size.height,
+    height: coodinatedSquare.size.width,
+  },
+})

@@ -1,5 +1,8 @@
-import { CoodinatedSquare } from '../coordinated_square'
-import { Square } from '../square'
+import {
+  CoodinatedSquare,
+  rotate as rotateCoordinatedSquare,
+} from '../coordinated_square'
+import { Square, rotate as rotateSquare } from '../square'
 
 const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
 const getTotalWeight = (weights: number[]) => sum(weights)
@@ -29,21 +32,9 @@ export const divideAreaHorizontally = (
   size: Square,
   weights: number[]
 ): CoodinatedSquare[] => {
-  // Divide area into n parts (weights.length) by weights (big weight has big area)
-  const totalWeight = getTotalWeight(weights)
-  const { width, height } = size
-  // split horizontally only
-  const divided = []
-  let y = 0
-  for (const weight of weights) {
-    const itemHeight = (height * weight) / totalWeight
-    divided.push({
-      origin: { x: 0, y },
-      size: { width, height: itemHeight },
-    })
-    y += itemHeight
-  }
-  return divided
+  return divideAreaVertically(rotateSquare(size), weights).map(
+    rotateCoordinatedSquare
+  )
 }
 
 export const divideAreaBoth = (
