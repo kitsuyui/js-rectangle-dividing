@@ -12,7 +12,7 @@ The spin-off package of https://github.com/kitsuyui/react-playground/tree/main/p
 
 ## Docs
 
-- TypeDoc: https://js-rectangle-dividing.typedoc.kitsuyui.com/
+- TypeDoc: https://js-rectangle-dividing.docs.kitsuyui.com/
 
 ## Usage
 
