@@ -10,10 +10,10 @@ export interface CoodinatedSquare {
   size: Square
 }
 
-export const getArea = (coodinatedSquare: CoodinatedSquare) =>
+export const getArea = (coodinatedSquare: CoodinatedSquare): number =>
   getSquareArea(coodinatedSquare.size)
 
-export const getVertecies = (coodinatedSquare: CoodinatedSquare) => {
+export const getVertecies = (coodinatedSquare: CoodinatedSquare): Point[] => {
   const { origin, size } = coodinatedSquare
   const { width, height } = size
   const { x, y } = origin
@@ -25,7 +25,7 @@ export const getVertecies = (coodinatedSquare: CoodinatedSquare) => {
   ]
 }
 
-export const getAspectRatio = (coodinatedSquare: CoodinatedSquare) =>
+export const getAspectRatio = (coodinatedSquare: CoodinatedSquare): number =>
   getSquareAspectRatio(coodinatedSquare.size)
 
 export const fromSquare = (square: Square): CoodinatedSquare => ({

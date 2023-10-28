@@ -7,6 +7,8 @@ import {
   divideAreaBoth,
 } from './index'
 
+const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
+
 test('divideAreaVertically', () => {
   // When divided vertically, the width of the divided area is the same as the width of the original area.
   const baseSize = { width: 180, height: 100 }
@@ -84,10 +86,8 @@ const testSameArea = (items: {
   // The sum of the divided area is the same as the original area.
   const { baseSize, dividedAreas } = items
   const tobeArea = getArea(baseSize)
-  const sumOfArea = dividedAreas
-    .map((d) => getArea(d.size))
-    .reduce((acc, area) => acc + area, 0)
-  //   const sumOfArea = dividedAreas.map(area).reduce((acc, area) => acc + area, 0);
+
+  const sumOfArea = sum(dividedAreas.map((d) => getArea(d.size)))
   expect(sumOfArea).toEqual(tobeArea)
 }
 
@@ -105,10 +105,8 @@ const testSameWeight = (items: {
 }) => {
   // The sum of the weights is the same as the length of the weights.
   const { weights, dividedAreas } = items
-  const sumOfArea = dividedAreas
-    .map((d) => getArea(d.size))
-    .reduce((acc, area) => acc + area, 0)
-  const sumOfWeights = weights.reduce((acc, weight) => acc + weight, 0)
+  const sumOfArea = sum(dividedAreas.map((d) => getArea(d.size)))
+  const sumOfWeights = sum(weights)
 
   for (const [i, weight] of weights.entries()) {
     // The width of the divided area is proportional to the weight.
