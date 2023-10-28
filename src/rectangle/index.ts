@@ -1,4 +1,4 @@
-export interface rectangle {
+export interface Rectangle {
   width: number
   height: number
 }
@@ -8,7 +8,7 @@ export interface rectangle {
  * @param rectangle
  * @returns
  */
-export const getArea = (rectangle: rectangle): number =>
+export const getArea = (rectangle: Rectangle): number =>
   rectangle.width * rectangle.height
 
 /**
@@ -16,7 +16,7 @@ export const getArea = (rectangle: rectangle): number =>
  * @param rectangle
  * @returns aspect ratio of rectangle
  */
-export const getAspectRatio = (rectangle: rectangle): number =>
+export const getAspectRatio = (rectangle: Rectangle): number =>
   rectangle.width / rectangle.height
 
 /**
@@ -25,7 +25,7 @@ export const getAspectRatio = (rectangle: rectangle): number =>
  * @param height
  * @returns rectangle
  */
-export const rotate = (rectangle: rectangle): rectangle => ({
+export const rotate = (rectangle: Rectangle): Rectangle => ({
   width: rectangle.height,
   height: rectangle.width,
 })

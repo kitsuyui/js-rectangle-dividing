@@ -125,9 +125,9 @@ describe('divideCoordinatedrectangleByAspectRatioBase', () => {
 })
 
 const testBasis = (items: {
-  baseSize: rectangle.rectangle
+  baseSize: rectangle.Rectangle
   weights: number[]
-  dividedAreas: coordinaterectangle.Coodinatedrectangle[]
+  dividedAreas: coordinaterectangle.CoodinatedRectangle[]
 }) => {
   const { baseSize, weights, dividedAreas } = items
   // The sum of the weights is the same as the length of the weights.
@@ -145,7 +145,7 @@ const testBasis = (items: {
  * @param dividedAreas
  */
 const testNoOverlaps = (
-  dividedAreas: coordinaterectangle.Coodinatedrectangle[]
+  dividedAreas: coordinaterectangle.CoodinatedRectangle[]
 ) => {
   // The divided areas do not overlap.
   for (const [i, dividedArea1] of dividedAreas.entries()) {
@@ -165,9 +165,9 @@ const testNoOverlaps = (
  * @param items
  */
 const testSameArea = (items: {
-  baseSize: rectangle.rectangle
+  baseSize: rectangle.Rectangle
   weights: number[]
-  dividedAreas: coordinaterectangle.Coodinatedrectangle[]
+  dividedAreas: coordinaterectangle.CoodinatedRectangle[]
 }) => {
   // The sum of the divided area is the same as the original area.
   const { baseSize, dividedAreas } = items
@@ -183,7 +183,7 @@ const testSameArea = (items: {
  */
 const testSameLength = (items: {
   weights: number[]
-  dividedAreas: coordinaterectangle.Coodinatedrectangle[]
+  dividedAreas: coordinaterectangle.CoodinatedRectangle[]
 }) => {
   const { weights, dividedAreas } = items
   expect(dividedAreas.length).toEqual(weights.length)
@@ -195,7 +195,7 @@ const testSameLength = (items: {
  */
 const testSameWeight = (items: {
   weights: number[]
-  dividedAreas: coordinaterectangle.Coodinatedrectangle[]
+  dividedAreas: coordinaterectangle.CoodinatedRectangle[]
 }) => {
   // The sum of the weights is the same as the length of the weights.
   const { weights, dividedAreas } = items
