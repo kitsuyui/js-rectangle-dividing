@@ -4,7 +4,13 @@ import * as square from '../square'
 const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
 const getTotalWeight = (weights: number[]) => sum(weights)
 
-export const divideAreaVertically = (
+/**
+ * divideAreaVertically divides area vertically
+ * @param size
+ * @param weights
+ * @returns divided area
+ */
+export const divideCoordinatedSquareVertiacally = (
   size: square.Square,
   weights: number[]
 ): coordinateSquare.CoodinatedSquare[] => {
@@ -25,16 +31,16 @@ export const divideAreaVertically = (
   return divided
 }
 
-export const divideAreaHorizontally = (
+export const divideCoordinatedSquareHorizontally = (
   size: square.Square,
   weights: number[]
 ): coordinateSquare.CoodinatedSquare[] => {
-  return divideAreaVertically(square.rotate(size), weights).map(
+  return divideCoordinatedSquareVertiacally(square.rotate(size), weights).map(
     coordinateSquare.rotate
   )
 }
 
-export const divideAreaBoth = (
+export const divideCoordinatedSquareByAspectRatio = (
   size: square.Square,
   weights: number[],
   tobeAspectRatio: number = 1.78 // default 16:9 = 1.78
