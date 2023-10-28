@@ -1,17 +1,19 @@
-import { overlaps, CoodinatedSquare } from '../coordinated_square'
-import { Square, getArea } from '../square'
+import * as coordinateSquare from '../coordinated_square'
+import * as square from '../square'
 
 import {
-  divideAreaVertically,
-  divideAreaHorizontally,
-  divideAreaBoth,
-} from './index'
+  divideCoordinatedSquareVertiacally,
+  divideCoordinatedSquareHorizontally,
+  divideCoordinatedSquareByAspectRatio,
+} from '.'
 
-test('divideAreaVertically', () => {
+const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
+
+test('divideCoordinatedSquareVertiacally', () => {
   // When divided vertically, the width of the divided area is the same as the width of the original area.
   const baseSize = { width: 180, height: 100 }
   const weights = [3, 2, 1]
-  const dividedAreas = divideAreaVertically(baseSize, weights)
+  const dividedAreas = divideCoordinatedSquareVertiacally(baseSize, weights)
   const expected = [
     { origin: { x: 0, y: 0 }, size: { width: 90, height: 100 } },
     { origin: { x: 90, y: 0 }, size: { width: 60, height: 100 } },
@@ -21,11 +23,11 @@ test('divideAreaVertically', () => {
   testBasis({ baseSize, weights, dividedAreas })
 })
 
-test('divideAreaHorizontally', () => {
+test('divideCoordinatedSquareHorizontally', () => {
   // When divided horizontally, the height of the divided area is the same as the height of the original area.
   const baseSize = { width: 100, height: 180 }
   const weights = [3, 2, 1]
-  const dividedAreas = divideAreaHorizontally(baseSize, weights)
+  const dividedAreas = divideCoordinatedSquareHorizontally(baseSize, weights)
   const expected = [
     { origin: { x: 0, y: 0 }, size: { width: 100, height: 90 } },
     { origin: { x: 0, y: 90 }, size: { width: 100, height: 60 } },
@@ -35,23 +37,97 @@ test('divideAreaHorizontally', () => {
   testBasis({ baseSize, weights, dividedAreas })
 })
 
-test('divideAreaBoth', () => {
-  const baseSize = { width: 180, height: 180 }
-  const weights = [3, 2, 1]
-  const result = divideAreaBoth(baseSize, weights, 2.0)
-  const expected = [
-    { origin: { x: 0, y: 0 }, size: { width: 180, height: 90 } },
-    { origin: { x: 0, y: 90 }, size: { width: 120, height: 90 } },
-    { origin: { x: 120, y: 90 }, size: { width: 60, height: 90 } },
-  ]
-  expect(result).toEqual(expected)
-  testBasis({ baseSize, weights, dividedAreas: result })
+describe('divideCoordinatedSquareByAspectRatioBase', () => {
+  test('default direction', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+    })
+    const expected = [
+      { origin: { x: 0, y: 0 }, size: { width: 180, height: 90 } },
+      { origin: { x: 0, y: 90 }, size: { width: 120, height: 90 } },
+      { origin: { x: 120, y: 90 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
+  test('left-top', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+      direction: 'left-top',
+    })
+    const expected = [
+      { origin: { x: 0, y: 0 }, size: { width: 180, height: 90 } },
+      { origin: { x: 0, y: 90 }, size: { width: 120, height: 90 } },
+      { origin: { x: 120, y: 90 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
+  test('right-top', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+      direction: 'right-top',
+    })
+    const expected = [
+      { origin: { x: 0, y: 0 }, size: { width: 180, height: 90 } },
+      { origin: { x: 60, y: 90 }, size: { width: 120, height: 90 } },
+      { origin: { x: 0, y: 90 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
+  test('left-bottom', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+      direction: 'left-bottom',
+    })
+    const expected = [
+      { origin: { x: 0, y: 90 }, size: { width: 180, height: 90 } },
+      { origin: { x: 0, y: 0 }, size: { width: 120, height: 90 } },
+      { origin: { x: 120, y: 0 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
+  test('right-bottom', () => {
+    const baseSize = { width: 180, height: 180 }
+    const weights = [3, 2, 1]
+    const result = divideCoordinatedSquareByAspectRatio({
+      size: baseSize,
+      weights,
+      tobeAspectRatio: 2.0,
+      direction: 'right-bottom',
+    })
+    const expected = [
+      { origin: { x: 0, y: 90 }, size: { width: 180, height: 90 } },
+      { origin: { x: 60, y: 0 }, size: { width: 120, height: 90 } },
+      { origin: { x: 0, y: 0 }, size: { width: 60, height: 90 } },
+    ]
+    expect(result).toEqual(expected)
+    testBasis({ baseSize, weights, dividedAreas: result })
+  })
 })
 
 const testBasis = (items: {
-  baseSize: Square
+  baseSize: square.Square
   weights: number[]
-  dividedAreas: CoodinatedSquare[]
+  dividedAreas: coordinateSquare.CoodinatedSquare[]
 }) => {
   const { baseSize, weights, dividedAreas } = items
   // The sum of the weights is the same as the length of the weights.
@@ -64,56 +140,68 @@ const testBasis = (items: {
   testNoOverlaps(dividedAreas)
 }
 
-const testNoOverlaps = (dividedAreas: CoodinatedSquare[]) => {
+/**
+ * The divided areas do not overlap.
+ * @param dividedAreas
+ */
+const testNoOverlaps = (dividedAreas: coordinateSquare.CoodinatedSquare[]) => {
   // The divided areas do not overlap.
   for (const [i, dividedArea1] of dividedAreas.entries()) {
     for (const [j, dividedArea2] of dividedAreas.entries()) {
       if (i === j) {
         continue
       }
-      expect(overlaps(dividedArea1, dividedArea2)).toBe(false)
+      expect(coordinateSquare.overlaps(dividedArea1, dividedArea2)).toBe(false)
     }
   }
 }
 
+/**
+ * The sum of the divided area is the same as the original area.
+ * @param items
+ */
 const testSameArea = (items: {
-  baseSize: Square
+  baseSize: square.Square
   weights: number[]
-  dividedAreas: CoodinatedSquare[]
+  dividedAreas: coordinateSquare.CoodinatedSquare[]
 }) => {
   // The sum of the divided area is the same as the original area.
   const { baseSize, dividedAreas } = items
-  const tobeArea = getArea(baseSize)
-  const sumOfArea = dividedAreas
-    .map((d) => getArea(d.size))
-    .reduce((acc, area) => acc + area, 0)
-  //   const sumOfArea = dividedAreas.map(area).reduce((acc, area) => acc + area, 0);
+  const tobeArea = square.getArea(baseSize)
+
+  const sumOfArea = sum(dividedAreas.map((d) => square.getArea(d.size)))
   expect(sumOfArea).toEqual(tobeArea)
 }
 
+/**
+ * The sum of the weights is the same as the length of the weights.
+ * @param items
+ */
 const testSameLength = (items: {
   weights: number[]
-  dividedAreas: CoodinatedSquare[]
+  dividedAreas: coordinateSquare.CoodinatedSquare[]
 }) => {
   const { weights, dividedAreas } = items
   expect(dividedAreas.length).toEqual(weights.length)
 }
 
+/**
+ * The width of the divided area is proportional to the weight.
+ * @param items
+ */
 const testSameWeight = (items: {
   weights: number[]
-  dividedAreas: CoodinatedSquare[]
+  dividedAreas: coordinateSquare.CoodinatedSquare[]
 }) => {
   // The sum of the weights is the same as the length of the weights.
   const { weights, dividedAreas } = items
-  const sumOfArea = dividedAreas
-    .map((d) => getArea(d.size))
-    .reduce((acc, area) => acc + area, 0)
-  const sumOfWeights = weights.reduce((acc, weight) => acc + weight, 0)
+  const sumOfArea = sum(dividedAreas.map((d) => square.getArea(d.size)))
+  const sumOfWeights = sum(weights)
 
   for (const [i, weight] of weights.entries()) {
     // The width of the divided area is proportional to the weight.
     expect(weight / sumOfWeights).toEqual(
-      getArea(dividedAreas[i].size) / sumOfArea
+      square.getArea(dividedAreas[i].size) / sumOfArea
     )
   }
 }

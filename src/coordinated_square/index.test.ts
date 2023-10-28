@@ -28,7 +28,9 @@ describe('getVertecies', () => {
       { x: 5, y: 10 }, // bottom right
       { x: 0, y: 10 }, // bottom left
     ]
-    expect(getVertecies(coodinatedSquare)).toEqual(expected)
+    const asis = getVertecies(coodinatedSquare)
+    expect(asis).toEqual(expected)
+    expect(asis.length).toBe(4)
   })
 })
 

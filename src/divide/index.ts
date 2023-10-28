@@ -1,12 +1,21 @@
-import { CoodinatedSquare } from '../coordinated_square'
-import { Square } from '../square'
+import * as coordinateSquare from '../coordinated_square'
+import * as square from '../square'
 
-export const divideAreaVertically = (
-  size: Square,
+const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
+const getTotalWeight = (weights: number[]) => sum(weights)
+
+/**
+ * divideAreaVertically divides area vertically
+ * @param size
+ * @param weights
+ * @returns divided area
+ */
+export const divideCoordinatedSquareVertiacally = (
+  size: square.Square,
   weights: number[]
-): CoodinatedSquare[] => {
+): coordinateSquare.CoodinatedSquare[] => {
   // Divide area into n parts (weights.length) by weights (big weight has big area)
-  const totalWeight = weights.reduce((acc, weight) => acc + weight, 0)
+  const totalWeight = getTotalWeight(weights)
   const { width, height } = size
   // split vertically only
   const divided = []
@@ -22,41 +31,70 @@ export const divideAreaVertically = (
   return divided
 }
 
-export const divideAreaHorizontally = (
-  size: Square,
+export const divideCoordinatedSquareHorizontally = (
+  size: square.Square,
   weights: number[]
-): CoodinatedSquare[] => {
-  // Divide area into n parts (weights.length) by weights (big weight has big area)
-  const totalWeight = weights.reduce((acc, weight) => acc + weight, 0)
-  const { width, height } = size
-  // split horizontally only
-  const divided = []
-  let y = 0
-  for (const weight of weights) {
-    const itemHeight = (height * weight) / totalWeight
-    divided.push({
-      origin: { x: 0, y },
-      size: { width, height: itemHeight },
-    })
-    y += itemHeight
-  }
-  return divided
+): coordinateSquare.CoodinatedSquare[] => {
+  return divideCoordinatedSquareVertiacally(square.rotate(size), weights).map(
+    coordinateSquare.rotate
+  )
 }
 
-export const divideAreaBoth = (
-  size: Square,
+export const divideCoordinatedSquareByAspectRatio = (params: {
+  size: square.Square
+  weights: number[]
+  tobeAspectRatio?: number // default 16:9 = 1.78
+  direction?: 'left-top' | 'right-top' | 'left-bottom' | 'right-bottom' // default left-top
+}): coordinateSquare.CoodinatedSquare[] => {
+  const tobeAspectRatio = params.tobeAspectRatio || 1.78
+  const direction = params.direction || 'left-top'
+  const { width, height } = params.size
+  const base = divideCoordinatedSquareByAspectRatioBase(
+    { width, height },
+    params.weights,
+    tobeAspectRatio
+  )
+  switch (direction) {
+    case 'right-top':
+      return base.map((item) => ({
+        origin: {
+          x: width - item.origin.x - item.size.width,
+          y: item.origin.y,
+        },
+        size: item.size,
+      }))
+    case 'left-bottom':
+      return base.map((item) => ({
+        origin: {
+          x: item.origin.x,
+          y: height - item.origin.y - item.size.height,
+        },
+        size: item.size,
+      }))
+    case 'right-bottom':
+      return base.map((item) => ({
+        origin: {
+          x: width - item.origin.x - item.size.width,
+          y: height - item.origin.y - item.size.height,
+        },
+        size: item.size,
+      }))
+    default:
+      return base
+  }
+}
+
+const divideCoordinatedSquareByAspectRatioBase = (
+  size: square.Square,
   weights: number[],
-  tobeAspectRatio: number = 1.78 // 16:9
-) => {
+  tobeAspectRatio: number = 1.78 // default 16:9 = 1.78
+): coordinateSquare.CoodinatedSquare[] => {
   // Divide area into n parts (weights.length) by weights (big weight has big area)
   const { width, height } = size
-  if (width === 0 || height === 0 || isNaN(width) || isNaN(height)) {
-    return []
-  }
-  const totalWeight = weights.reduce((acc, weight) => acc + weight, 0)
+  const totalWeight = getTotalWeight(weights)
   const totalArea = width * height
   const areaPerWeight = totalArea / totalWeight
-  const inAreas: CoodinatedSquare[] = []
+  const inAreas: coordinateSquare.CoodinatedSquare[] = []
   let remainArea = { width, height, x: 0, y: 0 }
   const remainWeights = weights.slice() // copy
   while (remainWeights.length > 0) {
@@ -66,7 +104,7 @@ export const divideAreaBoth = (
 
     while (remainWeights.length > 0) {
       pickedWeights.push(remainWeights.shift()!)
-      const pickedWeightsTotal = pickedWeights.reduce((a, b) => a + b, 0)
+      const pickedWeightsTotal = sum(pickedWeights)
       const allocatedArea = pickedWeightsTotal * areaPerWeight
       const allocatedWidth = splitVertical ? allocatedArea / height : width
       const allocatedHeight = splitVertical ? height : allocatedArea / width
@@ -78,7 +116,7 @@ export const divideAreaBoth = (
         break
       }
     }
-    const pickedWeightsTotal = pickedWeights.reduce((a, b) => a + b, 0)
+    const pickedWeightsTotal = sum(pickedWeights)
     const allocatedArea = pickedWeightsTotal * areaPerWeight
     const allocatedWidth = splitVertical ? allocatedArea / height : width
     const allocatedHeight = splitVertical ? height : allocatedArea / width
