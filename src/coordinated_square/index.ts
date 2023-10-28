@@ -1,17 +1,13 @@
 import { Point } from '../point'
-import {
-  Square,
-  getArea as getSquareArea,
-  getAspectRatio as getSquareAspectRatio,
-} from '../square'
+import * as square from '../square'
 
 export interface CoodinatedSquare {
   origin: Point
-  size: Square
+  size: square.Square
 }
 
 export const getArea = (coodinatedSquare: CoodinatedSquare): number =>
-  getSquareArea(coodinatedSquare.size)
+  square.getArea(coodinatedSquare.size)
 
 export const getVertecies = (coodinatedSquare: CoodinatedSquare): Point[] => {
   const { origin, size } = coodinatedSquare
@@ -26,9 +22,9 @@ export const getVertecies = (coodinatedSquare: CoodinatedSquare): Point[] => {
 }
 
 export const getAspectRatio = (coodinatedSquare: CoodinatedSquare): number =>
-  getSquareAspectRatio(coodinatedSquare.size)
+  square.getAspectRatio(coodinatedSquare.size)
 
-export const fromSquare = (square: Square): CoodinatedSquare => ({
+export const fromSquare = (square: square.Square): CoodinatedSquare => ({
   origin: { x: 0, y: 0 },
   size: square,
 })

@@ -1,16 +1,13 @@
-import {
-  CoodinatedSquare,
-  rotate as rotateCoordinatedSquare,
-} from '../coordinated_square'
-import { Square, rotate as rotateSquare } from '../square'
+import * as coordinateSquare from '../coordinated_square'
+import * as square from '../square'
 
 const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
 const getTotalWeight = (weights: number[]) => sum(weights)
 
 export const divideAreaVertically = (
-  size: Square,
+  size: square.Square,
   weights: number[]
-): CoodinatedSquare[] => {
+): coordinateSquare.CoodinatedSquare[] => {
   // Divide area into n parts (weights.length) by weights (big weight has big area)
   const totalWeight = getTotalWeight(weights)
   const { width, height } = size
@@ -29,25 +26,25 @@ export const divideAreaVertically = (
 }
 
 export const divideAreaHorizontally = (
-  size: Square,
+  size: square.Square,
   weights: number[]
-): CoodinatedSquare[] => {
-  return divideAreaVertically(rotateSquare(size), weights).map(
-    rotateCoordinatedSquare
+): coordinateSquare.CoodinatedSquare[] => {
+  return divideAreaVertically(square.rotate(size), weights).map(
+    coordinateSquare.rotate
   )
 }
 
 export const divideAreaBoth = (
-  size: Square,
+  size: square.Square,
   weights: number[],
   tobeAspectRatio: number = 1.78 // default 16:9 = 1.78
-) => {
+): coordinateSquare.CoodinatedSquare[] => {
   // Divide area into n parts (weights.length) by weights (big weight has big area)
   const { width, height } = size
   const totalWeight = getTotalWeight(weights)
   const totalArea = width * height
   const areaPerWeight = totalArea / totalWeight
-  const inAreas: CoodinatedSquare[] = []
+  const inAreas: coordinateSquare.CoodinatedSquare[] = []
   let remainArea = { width, height, x: 0, y: 0 }
   const remainWeights = weights.slice() // copy
   while (remainWeights.length > 0) {

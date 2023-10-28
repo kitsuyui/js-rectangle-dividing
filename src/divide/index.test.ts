@@ -1,11 +1,7 @@
-import { overlaps, CoodinatedSquare } from '../coordinated_square'
-import { Square, getArea } from '../square'
+import * as coordinateSquare from '../coordinated_square'
+import * as square from '../square'
 
-import {
-  divideAreaVertically,
-  divideAreaHorizontally,
-  divideAreaBoth,
-} from './index'
+import { divideAreaVertically, divideAreaHorizontally, divideAreaBoth } from '.'
 
 const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
 
@@ -51,9 +47,9 @@ test('divideAreaBoth', () => {
 })
 
 const testBasis = (items: {
-  baseSize: Square
+  baseSize: square.Square
   weights: number[]
-  dividedAreas: CoodinatedSquare[]
+  dividedAreas: coordinateSquare.CoodinatedSquare[]
 }) => {
   const { baseSize, weights, dividedAreas } = items
   // The sum of the weights is the same as the length of the weights.
@@ -66,34 +62,34 @@ const testBasis = (items: {
   testNoOverlaps(dividedAreas)
 }
 
-const testNoOverlaps = (dividedAreas: CoodinatedSquare[]) => {
+const testNoOverlaps = (dividedAreas: coordinateSquare.CoodinatedSquare[]) => {
   // The divided areas do not overlap.
   for (const [i, dividedArea1] of dividedAreas.entries()) {
     for (const [j, dividedArea2] of dividedAreas.entries()) {
       if (i === j) {
         continue
       }
-      expect(overlaps(dividedArea1, dividedArea2)).toBe(false)
+      expect(coordinateSquare.overlaps(dividedArea1, dividedArea2)).toBe(false)
     }
   }
 }
 
 const testSameArea = (items: {
-  baseSize: Square
+  baseSize: square.Square
   weights: number[]
-  dividedAreas: CoodinatedSquare[]
+  dividedAreas: coordinateSquare.CoodinatedSquare[]
 }) => {
   // The sum of the divided area is the same as the original area.
   const { baseSize, dividedAreas } = items
-  const tobeArea = getArea(baseSize)
+  const tobeArea = square.getArea(baseSize)
 
-  const sumOfArea = sum(dividedAreas.map((d) => getArea(d.size)))
+  const sumOfArea = sum(dividedAreas.map((d) => square.getArea(d.size)))
   expect(sumOfArea).toEqual(tobeArea)
 }
 
 const testSameLength = (items: {
   weights: number[]
-  dividedAreas: CoodinatedSquare[]
+  dividedAreas: coordinateSquare.CoodinatedSquare[]
 }) => {
   const { weights, dividedAreas } = items
   expect(dividedAreas.length).toEqual(weights.length)
@@ -101,17 +97,17 @@ const testSameLength = (items: {
 
 const testSameWeight = (items: {
   weights: number[]
-  dividedAreas: CoodinatedSquare[]
+  dividedAreas: coordinateSquare.CoodinatedSquare[]
 }) => {
   // The sum of the weights is the same as the length of the weights.
   const { weights, dividedAreas } = items
-  const sumOfArea = sum(dividedAreas.map((d) => getArea(d.size)))
+  const sumOfArea = sum(dividedAreas.map((d) => square.getArea(d.size)))
   const sumOfWeights = sum(weights)
 
   for (const [i, weight] of weights.entries()) {
     // The width of the divided area is proportional to the weight.
     expect(weight / sumOfWeights).toEqual(
-      getArea(dividedAreas[i].size) / sumOfArea
+      square.getArea(dividedAreas[i].size) / sumOfArea
     )
   }
 }
