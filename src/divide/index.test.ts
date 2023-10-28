@@ -1,19 +1,15 @@
 import * as coordinaterectangle from '../coordinated_rectangle'
 import * as rectangle from '../rectangle'
 
-import {
-  divideCoordinatedrectangleVertiacally,
-  divideCoordinatedrectangleHorizontally,
-  divideCoordinatedrectangleByAspectRatio,
-} from '.'
+import { divideVertically, divideHorizontally, divideByAspectRatio } from '.'
 
 const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
 
-test('divideCoordinatedrectangleVertiacally', () => {
+test('divideVertically', () => {
   // When divided vertically, the width of the divided area is the same as the width of the original area.
   const baseSize = { width: 180, height: 100 }
   const weights = [3, 2, 1]
-  const dividedAreas = divideCoordinatedrectangleVertiacally(baseSize, weights)
+  const dividedAreas = divideVertically(baseSize, weights)
   const expected = [
     { origin: { x: 0, y: 0 }, size: { width: 90, height: 100 } },
     { origin: { x: 90, y: 0 }, size: { width: 60, height: 100 } },
@@ -23,11 +19,11 @@ test('divideCoordinatedrectangleVertiacally', () => {
   testBasis({ baseSize, weights, dividedAreas })
 })
 
-test('divideCoordinatedrectangleHorizontally', () => {
+test('divideHorizontally', () => {
   // When divided horizontally, the height of the divided area is the same as the height of the original area.
   const baseSize = { width: 100, height: 180 }
   const weights = [3, 2, 1]
-  const dividedAreas = divideCoordinatedrectangleHorizontally(baseSize, weights)
+  const dividedAreas = divideHorizontally(baseSize, weights)
   const expected = [
     { origin: { x: 0, y: 0 }, size: { width: 100, height: 90 } },
     { origin: { x: 0, y: 90 }, size: { width: 100, height: 60 } },
@@ -37,11 +33,11 @@ test('divideCoordinatedrectangleHorizontally', () => {
   testBasis({ baseSize, weights, dividedAreas })
 })
 
-describe('divideCoordinatedrectangleByAspectRatioBase', () => {
+describe('divideByAspectRatioBase', () => {
   test('default direction', () => {
     const baseSize = { width: 180, height: 180 }
     const weights = [3, 2, 1]
-    const result = divideCoordinatedrectangleByAspectRatio({
+    const result = divideByAspectRatio({
       size: baseSize,
       weights,
       tobeAspectRatio: 2.0,
@@ -57,7 +53,7 @@ describe('divideCoordinatedrectangleByAspectRatioBase', () => {
   test('left-top', () => {
     const baseSize = { width: 180, height: 180 }
     const weights = [3, 2, 1]
-    const result = divideCoordinatedrectangleByAspectRatio({
+    const result = divideByAspectRatio({
       size: baseSize,
       weights,
       tobeAspectRatio: 2.0,
@@ -74,7 +70,7 @@ describe('divideCoordinatedrectangleByAspectRatioBase', () => {
   test('right-top', () => {
     const baseSize = { width: 180, height: 180 }
     const weights = [3, 2, 1]
-    const result = divideCoordinatedrectangleByAspectRatio({
+    const result = divideByAspectRatio({
       size: baseSize,
       weights,
       tobeAspectRatio: 2.0,
@@ -91,7 +87,7 @@ describe('divideCoordinatedrectangleByAspectRatioBase', () => {
   test('left-bottom', () => {
     const baseSize = { width: 180, height: 180 }
     const weights = [3, 2, 1]
-    const result = divideCoordinatedrectangleByAspectRatio({
+    const result = divideByAspectRatio({
       size: baseSize,
       weights,
       tobeAspectRatio: 2.0,
@@ -108,7 +104,7 @@ describe('divideCoordinatedrectangleByAspectRatioBase', () => {
   test('right-bottom', () => {
     const baseSize = { width: 180, height: 180 }
     const weights = [3, 2, 1]
-    const result = divideCoordinatedrectangleByAspectRatio({
+    const result = divideByAspectRatio({
       size: baseSize,
       weights,
       tobeAspectRatio: 2.0,
