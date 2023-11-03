@@ -1,3 +1,4 @@
+import { coordinatedrectangle } from '..'
 import * as coordinateRectangle from '../coordinated_rectangle'
 import * as rectangle from '../rectangle'
 
@@ -31,6 +32,12 @@ export const divideVertically = (
   return divided
 }
 
+/**
+ * divideAreaHorizontally divides area horizontally
+ * @param size
+ * @param weights
+ * @returns divided area
+ */
 export const divideHorizontally = (
   size: rectangle.Rectangle,
   weights: number[]
@@ -40,11 +47,25 @@ export const divideHorizontally = (
   )
 }
 
+type AspectRatioDivideDirection =
+  | 'left-top'
+  | 'right-top'
+  | 'left-bottom'
+  | 'right-bottom'
+
+/**
+ * divideAreaByAspectRatio divides area by aspect ratio
+ * @param size size of area
+ * @param weights weights of each area
+ * @param tobeAspectRatio default 16:9 = 1.78
+ * @param direction default left-top
+ * @returns divided area
+ */
 export const divideByAspectRatio = (params: {
   size: rectangle.Rectangle
   weights: number[]
   tobeAspectRatio?: number // default 16:9 = 1.78
-  direction?: 'left-top' | 'right-top' | 'left-bottom' | 'right-bottom' // default left-top
+  direction?: AspectRatioDivideDirection // default left-top
 }): coordinateRectangle.CoodinatedRectangle[] => {
   const tobeAspectRatio = params.tobeAspectRatio || 1.78
   const direction = params.direction || 'left-top'
@@ -90,64 +111,99 @@ const divideByAspectRatioBase = (
   tobeAspectRatio: number = 1.78 // default 16:9 = 1.78
 ): coordinateRectangle.CoodinatedRectangle[] => {
   // Divide area into n parts (weights.length) by weights (big weight has big area)
-  const { width, height } = size
-  const totalWeight = getTotalWeight(weights)
-  const totalArea = width * height
-  const areaPerWeight = totalArea / totalWeight
-  const inAreas: coordinateRectangle.CoodinatedRectangle[] = []
-  let remainArea = { width, height, x: 0, y: 0 }
-  const remainWeights = weights.slice() // copy
+  const dividedAreas = []
+  let remainWeights = [...weights]
+  let remainArea = coordinateRectangle.fromRectangle(size)
   while (remainWeights.length > 0) {
-    const { width, height, x, y } = remainArea
-    const splitVertical = width > height
-    const pickedWeights: number[] = []
+    const result = divideByAspectUntilAspectRatio(
+      remainArea,
+      remainWeights,
+      tobeAspectRatio
+    )
+    remainArea = result.remainArea
+    remainWeights = result.remainWeights
+    dividedAreas.push(...result.divided)
+  }
+  return dividedAreas
+}
 
-    while (remainWeights.length > 0) {
-      pickedWeights.push(remainWeights.shift()!)
-      const pickedWeightsTotal = sum(pickedWeights)
-      const allocatedArea = pickedWeightsTotal * areaPerWeight
-      const allocatedWidth = splitVertical ? allocatedArea / height : width
-      const allocatedHeight = splitVertical ? height : allocatedArea / width
-      if (
-        Math.max(allocatedWidth, allocatedHeight * tobeAspectRatio) /
-          Math.min(allocatedWidth, allocatedHeight * tobeAspectRatio) <
-        pickedWeights.length + 1
-      ) {
-        break
-      }
-    }
-    const pickedWeightsTotal = sum(pickedWeights)
+interface DividedResult {
+  divided: coordinateRectangle.CoodinatedRectangle[]
+  remainArea: coordinateRectangle.CoodinatedRectangle
+  remainWeights: number[]
+}
+
+const divideByAspectUntilAspectRatio = (
+  size: coordinatedrectangle.CoodinatedRectangle,
+  weights: number[],
+  tobeAspectRatio: number
+): DividedResult => {
+  const divided: coordinateRectangle.CoodinatedRectangle[] = []
+  const remainWeights = [...weights] // copy
+  const { width, height } = size.size
+  const totalWeight = getTotalWeight(weights)
+  const totalArea = rectangle.getArea(size.size)
+  const areaPerWeight = totalArea / totalWeight
+  const totalAspectRatio = width / height
+  const splitVertical = totalAspectRatio >= tobeAspectRatio
+
+  const tobeAspectRatioInSplitDirection = splitVertical
+    ? tobeAspectRatio
+    : 1 / tobeAspectRatio
+  const pickedWeights: number[] = []
+  const constantSideLength = splitVertical ? height : width
+
+  // pick weights until aspect ratio is over
+  while (remainWeights.length > 0) {
+    pickedWeights.push(remainWeights.shift()!)
+    const pickedWeightsTotal = getTotalWeight(pickedWeights)
     const allocatedArea = pickedWeightsTotal * areaPerWeight
-    const allocatedWidth = splitVertical ? allocatedArea / height : width
-    const allocatedHeight = splitVertical ? height : allocatedArea / width
-    const splitInAllocatedArea = allocatedWidth > allocatedHeight
-    let x2 = remainArea.x
-    let y2 = remainArea.y
-    for (const pickedWeight of pickedWeights) {
-      const w = (allocatedWidth * pickedWeight) / pickedWeightsTotal
-      const h = (allocatedHeight * pickedWeight) / pickedWeightsTotal
-      inAreas.push({
-        origin: {
-          x: splitInAllocatedArea ? x2 : x,
-          y: splitInAllocatedArea ? y : y2,
-        },
-        size: {
-          width: splitInAllocatedArea ? w : allocatedWidth,
-          height: splitInAllocatedArea ? allocatedHeight : h,
-        },
-      })
-      if (splitInAllocatedArea) {
-        x2 += w
-      } else {
-        y2 += h
-      }
-    }
-    remainArea = {
-      width: splitVertical ? width - allocatedWidth : width,
-      height: splitVertical ? height : height - allocatedHeight,
-      x: splitVertical ? x + allocatedWidth : x,
-      y: splitVertical ? y : y + allocatedHeight,
+    const aspectRatioInDirection =
+      allocatedArea / constantSideLength / constantSideLength
+    const isAspectRatioOver =
+      aspectRatioInDirection >= tobeAspectRatioInSplitDirection
+    if (isAspectRatioOver) {
+      break
     }
   }
-  return inAreas
+
+  const pickedWeightsTotal = getTotalWeight(pickedWeights)
+  const allocatedArea = pickedWeightsTotal * areaPerWeight
+  const variableSideLength = allocatedArea / constantSideLength
+  const cutWidth = splitVertical ? variableSideLength : constantSideLength
+  const cutHeight = splitVertical ? constantSideLength : variableSideLength
+  const { x, y } = size.origin
+  let [dx, dy] = [0, 0]
+  for (const pickedWeight of pickedWeights) {
+    const pickedRatio = pickedWeight / pickedWeightsTotal
+    const w = cutWidth * pickedRatio
+    const h = cutHeight * pickedRatio
+    divided.push({
+      origin: {
+        x: x + dx,
+        y: y + dy,
+      },
+      size: {
+        width: splitVertical ? w : cutWidth,
+        height: splitVertical ? cutHeight : h,
+      },
+    })
+    dx += splitVertical ? w : 0
+    dy += splitVertical ? 0 : h
+  }
+  const remainArea = {
+    size: {
+      width: splitVertical ? width - cutWidth : width,
+      height: splitVertical ? height : height - cutHeight,
+    },
+    origin: {
+      x: splitVertical ? x + cutWidth : x,
+      y: splitVertical ? y : y + cutHeight,
+    },
+  }
+  return {
+    divided,
+    remainArea,
+    remainWeights,
+  }
 }
