@@ -1,7 +1,7 @@
 import * as coordinaterectangle from '../coordinated_rectangle'
 import * as rectangle from '../rectangle'
 
-import { divideVertically, divideHorizontally, divideByAspectRatio } from '.'
+import { divideByAspectRatio, divideHorizontally, divideVertically } from '.'
 
 const sum = (arr: number[]): number => arr.reduce((a, b) => a + b, 0)
 
@@ -141,7 +141,7 @@ const testBasis = (items: {
  * @param dividedAreas
  */
 const testNoOverlaps = (
-  dividedAreas: coordinaterectangle.CoodinatedRectangle[]
+  dividedAreas: coordinaterectangle.CoodinatedRectangle[],
 ) => {
   // The divided areas do not overlap.
   for (const [i, dividedArea1] of dividedAreas.entries()) {
@@ -150,7 +150,7 @@ const testNoOverlaps = (
         continue
       }
       expect(coordinaterectangle.overlaps(dividedArea1, dividedArea2)).toBe(
-        false
+        false,
       )
     }
   }
@@ -201,7 +201,7 @@ const testSameWeight = (items: {
   for (const [i, weight] of weights.entries()) {
     // The width of the divided area is proportional to the weight.
     expect(weight / sumOfWeights).toEqual(
-      rectangle.getArea(dividedAreas[i].size) / sumOfArea
+      rectangle.getArea(dividedAreas[i].size) / sumOfArea,
     )
   }
 }

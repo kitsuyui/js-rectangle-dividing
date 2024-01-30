@@ -1,8 +1,8 @@
 import {
-  getVertecies,
-  getArea,
   containsPoint,
+  getArea,
   getAspectRatio,
+  getVertecies,
   overlaps,
 } from '.'
 

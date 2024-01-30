@@ -37,7 +37,7 @@ export const getVertecies = (rect: CoodinatedRectangle): Point[] => {
  * @returns aspect ratio of coodinatedrectangle
  */
 export const getAspectRatio = (
-  coodinatedrectangle: CoodinatedRectangle
+  coodinatedrectangle: CoodinatedRectangle,
 ): number => rectangle.getAspectRatio(coodinatedrectangle.size)
 
 /**
@@ -46,7 +46,7 @@ export const getAspectRatio = (
  * @returns  Coodinatedrectangle
  */
 export const fromRectangle = (
-  rect: rectangle.Rectangle
+  rect: rectangle.Rectangle,
 ): CoodinatedRectangle => ({
   origin: { x: 0, y: 0 },
   size: rect,
@@ -60,7 +60,7 @@ export const fromRectangle = (
  */
 export const containsPoint = (
   rect: CoodinatedRectangle,
-  point: Point
+  point: Point,
 ): boolean => {
   const { x, y } = point
   const {
@@ -80,7 +80,7 @@ export const containsPoint = (
  */
 export const overlaps = (
   rect1: CoodinatedRectangle,
-  rect2: CoodinatedRectangle
+  rect2: CoodinatedRectangle,
 ): boolean => {
   const vertecies1 = getVertecies(rect1)
   for (const point of vertecies1) {
