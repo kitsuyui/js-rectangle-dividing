@@ -13,7 +13,7 @@ const getTotalWeight = (weights: number[]) => sum(weights)
  */
 export const divideVertically = (
   size: rectangle.Rectangle,
-  weights: number[]
+  weights: number[],
 ): coordinateRectangle.CoodinatedRectangle[] => {
   // Divide area into n parts (weights.length) by weights (big weight has big area)
   const totalWeight = getTotalWeight(weights)
@@ -40,10 +40,10 @@ export const divideVertically = (
  */
 export const divideHorizontally = (
   size: rectangle.Rectangle,
-  weights: number[]
+  weights: number[],
 ): coordinateRectangle.CoodinatedRectangle[] => {
   return divideVertically(rectangle.rotate(size), weights).map(
-    coordinateRectangle.rotate
+    coordinateRectangle.rotate,
   )
 }
 
@@ -73,7 +73,7 @@ export const divideByAspectRatio = (params: {
   const base = divideByAspectRatioBase(
     { width, height },
     params.weights,
-    tobeAspectRatio
+    tobeAspectRatio,
   )
   switch (direction) {
     case 'right-top':
@@ -108,7 +108,7 @@ export const divideByAspectRatio = (params: {
 const divideByAspectRatioBase = (
   size: rectangle.Rectangle,
   weights: number[],
-  tobeAspectRatio: number = 1.78 // default 16:9 = 1.78
+  tobeAspectRatio = 1.78, // default 16:9 = 1.78
 ): coordinateRectangle.CoodinatedRectangle[] => {
   // Divide area into n parts (weights.length) by weights (big weight has big area)
   const dividedAreas = []
@@ -118,7 +118,7 @@ const divideByAspectRatioBase = (
     const result = divideByAspectUntilAspectRatio(
       remainArea,
       remainWeights,
-      tobeAspectRatio
+      tobeAspectRatio,
     )
     remainArea = result.remainArea
     remainWeights = result.remainWeights
@@ -136,7 +136,7 @@ interface DividedResult {
 const divideByAspectUntilAspectRatio = (
   size: coordinatedrectangle.CoodinatedRectangle,
   weights: number[],
-  tobeAspectRatio: number
+  tobeAspectRatio: number,
 ): DividedResult => {
   const divided: coordinateRectangle.CoodinatedRectangle[] = []
   const remainWeights = [...weights] // copy
@@ -155,6 +155,7 @@ const divideByAspectUntilAspectRatio = (
 
   // pick weights until aspect ratio is over
   while (remainWeights.length > 0) {
+    // biome-ignore lint/style/noNonNullAssertion: non-null check is done by while condition
     pickedWeights.push(remainWeights.shift()!)
     const pickedWeightsTotal = getTotalWeight(pickedWeights)
     const allocatedArea = pickedWeightsTotal * areaPerWeight
