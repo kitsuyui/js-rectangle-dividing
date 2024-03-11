@@ -1,4 +1,4 @@
-import { Point } from '../point'
+import type { Point } from '../point'
 import * as rectangle from '../rectangle'
 
 export interface CoodinatedRectangle {

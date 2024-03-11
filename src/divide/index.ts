@@ -1,4 +1,4 @@
-import { coordinatedrectangle } from '..'
+import type { coordinatedrectangle } from '..'
 import * as coordinateRectangle from '../coordinated_rectangle'
 import * as rectangle from '../rectangle'
 
