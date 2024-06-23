@@ -34,7 +34,7 @@ importers:
         version: 8.1.0(@swc/core@1.6.5)(typescript@5.5.2)
       typedoc:
         specifier: ^0.26.0
-        version: 0.26.0(typescript@5.5.2)
+        version: 0.26.1(typescript@5.5.2)
       typescript:
         specifier: ^5.4.2
         version: 5.5.2
@@ -1965,8 +1965,8 @@ packages:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
 
-  typedoc@0.26.0:
-    resolution: {integrity: sha512-OcYevjHsMN8DfpaL0dSBGAEBhOxuBB5Au8QVs9oz9iB0kRStPZwXLFWqh9gwbMUxNjW3yQuIM5GrVVauMJ2Akw==}
+  typedoc@0.26.1:
+    resolution: {integrity: sha512-APsVXqh93jTlpkLuw6+/IORx7n5LN8hzJV8nvMIrYYaIva0VCq0CoDN7Z3hsRThEYVExI/qoFHnAAxrhG+Wd7Q==}
     engines: {node: '>= 18'}
     hasBin: true
     peerDependencies:
@@ -4207,7 +4207,7 @@ snapshots:
 
   type-fest@0.21.3: {}
 
-  typedoc@0.26.0(typescript@5.5.2):
+  typedoc@0.26.1(typescript@5.5.2):
     dependencies:
       lunr: 2.3.9
       markdown-it: 14.1.0
