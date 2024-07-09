@@ -15,11 +15,11 @@ export const getArea = (rect: CoodinatedRectangle): number =>
   rectangle.getArea(rect.size)
 
 /**
- * getVertecies returns vertecies of coodinatedrectangle
+ * getVertices returns vertices of coodinatedrectangle
  * @param rect
- * @returns vertecies of coodinatedrectangle (top left, top right, bottom right, bottom left)
+ * @returns vertices of coodinatedrectangle (top left, top right, bottom right, bottom left)
  */
-export const getVertecies = (rect: CoodinatedRectangle): Point[] => {
+export const getVertices = (rect: CoodinatedRectangle): Point[] => {
   const { origin, size } = rect
   const { width, height } = size
   const { x, y } = origin
@@ -82,8 +82,8 @@ export const overlaps = (
   rect1: CoodinatedRectangle,
   rect2: CoodinatedRectangle,
 ): boolean => {
-  const vertecies1 = getVertecies(rect1)
-  for (const point of vertecies1) {
+  const vertices1 = getVertices(rect1)
+  for (const point of vertices1) {
     if (containsPoint(rect2, point)) {
       return true
     }
