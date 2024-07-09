@@ -2,7 +2,7 @@ import {
   containsPoint,
   getArea,
   getAspectRatio,
-  getVertecies,
+  getVertices,
   overlaps,
 } from '.'
 
@@ -16,8 +16,8 @@ describe('getArea', () => {
   })
 })
 
-describe('getVertecies', () => {
-  it('returns the vertecies of a rectangle', () => {
+describe('getVertices', () => {
+  it('returns the vertices of a rectangle', () => {
     const rect = {
       origin: { x: 0, y: 0 },
       size: { width: 5, height: 10 },
@@ -28,7 +28,7 @@ describe('getVertecies', () => {
       { x: 5, y: 10 }, // bottom right
       { x: 0, y: 10 }, // bottom left
     ]
-    const asis = getVertecies(rect)
+    const asis = getVertices(rect)
     expect(asis).toEqual(expected)
     expect(asis.length).toBe(4)
   })
